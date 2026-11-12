@@ -1,0 +1,14 @@
+/build/
+/config.yaml
+/.env
+/.env.*
+*.private.env
+*openrc*
+*credentials*
+/coverage.out
+*.test
+*.exe
+/.codex/
+/.agents/
+/.idea/
+/.vscode/

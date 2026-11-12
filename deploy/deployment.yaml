@@ -1,0 +1,100 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vk-scheduler
+  labels:
+    app: vk-scheduler
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: vk-scheduler
+  template:
+    metadata:
+      labels:
+        app: vk-scheduler
+    spec:
+      automountServiceAccountToken: false
+      terminationGracePeriodSeconds: 330
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65532
+        runAsGroup: 65532
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: vk-scheduler
+          image: ghcr.io/sentoz/vk-scheduler:0.1.0
+          args: ["--config=/config/config.yaml"]
+          env:
+            - name: VK_SCHEDULER_CONFIG
+              value: /config/config.yaml
+            - name: OS_AUTH_TYPE
+              value: v3password
+            - name: OS_PROJECT_ID
+              valueFrom:
+                configMapKeyRef:
+                  name: vk-scheduler-scope
+                  key: OS_PROJECT_ID
+            - name: OS_REGION_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: vk-scheduler-scope
+                  key: OS_REGION_NAME
+            - name: OS_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: vk-scheduler-auth
+                  key: OS_USERNAME
+            - name: OS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: vk-scheduler-auth
+                  key: OS_PASSWORD
+          ports:
+            - name: http
+              containerPort: 9090
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: http
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: http
+            periodSeconds: 10
+          startupProbe:
+            httpGet:
+              path: /health/ready
+              port: http
+            periodSeconds: 5
+            failureThreshold: 60
+          resources:
+            requests:
+              cpu: 100m
+              memory: 100Mi
+            limits:
+              cpu: 500m
+              memory: 256Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+          volumeMounts:
+            - name: config
+              mountPath: /config
+              readOnly: true
+            - name: schedules
+              mountPath: /schedules
+              readOnly: true
+      volumes:
+        - name: config
+          configMap:
+            name: vk-scheduler-config
+        - name: schedules
+          configMap:
+            name: vk-scheduler-schedules

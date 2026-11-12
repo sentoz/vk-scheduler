@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vk-scheduler
+spec:
+  template:
+    spec:
+      containers:
+        - name: vk-scheduler
+          env:
+            - name: OS_AUTH_TYPE
+              value: v3token
+            - name: OS_USERNAME
+              $patch: delete
+            - name: OS_PASSWORD
+              $patch: delete
+            - name: OS_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: vk-scheduler-auth
+                  key: OS_TOKEN

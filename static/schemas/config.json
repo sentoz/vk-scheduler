@@ -1,0 +1,129 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/sentoz/vk-scheduler/internal/config/config",
+  "$ref": "#/$defs/Config",
+  "$defs": {
+    "CloudConfig": {
+      "properties": {
+        "auth_url": {
+          "type": "string"
+        },
+        "project_id": {
+          "type": "string"
+        },
+        "region": {
+          "type": "string"
+        },
+        "user_domain_name": {
+          "type": "string"
+        },
+        "interface": {
+          "type": "string"
+        },
+        "max_concurrent_reads": {
+          "type": "integer"
+        },
+        "compute_endpoint": {
+          "type": "string"
+        },
+        "magnum_endpoint": {
+          "type": "string"
+        },
+        "managed_k8s_endpoint": {
+          "type": "string"
+        },
+        "magnum_microversion": {
+          "type": "string"
+        },
+        "request_timeout": {
+          "$ref": "#/$defs/Duration"
+        },
+        "poll_interval": {
+          "$ref": "#/$defs/Duration"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "auth_url",
+        "user_domain_name",
+        "interface",
+        "max_concurrent_reads",
+        "magnum_microversion",
+        "request_timeout",
+        "poll_interval"
+      ]
+    },
+    "Config": {
+      "properties": {
+        "timezone": {
+          "$ref": "#/$defs/Timezone"
+        },
+        "schedules_dir": {
+          "type": "string",
+          "minLength": 1
+        },
+        "validation_resources": {
+          "type": "boolean"
+        },
+        "validation_interval": {
+          "$ref": "#/$defs/Duration"
+        },
+        "shutdown_timeout": {
+          "$ref": "#/$defs/Duration"
+        },
+        "operation_timeout": {
+          "$ref": "#/$defs/Duration"
+        },
+        "max_concurrent_jobs": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "metrics_enabled": {
+          "type": "boolean"
+        },
+        "ui_enabled": {
+          "type": "boolean"
+        },
+        "metrics_port": {
+          "type": "integer",
+          "maximum": 65535,
+          "minimum": 1
+        },
+        "cloud": {
+          "$ref": "#/$defs/CloudConfig"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "timezone",
+        "schedules_dir",
+        "validation_resources",
+        "validation_interval",
+        "shutdown_timeout",
+        "operation_timeout",
+        "max_concurrent_jobs",
+        "metrics_enabled",
+        "ui_enabled",
+        "metrics_port",
+        "cloud"
+      ]
+    },
+    "Duration": {
+      "type": "string",
+      "pattern": "^(?:[0-9]+(?:\\.[0-9]+)?(?:s|m|h))+$"
+    },
+    "Timezone": {
+      "type": "string",
+      "description": "IANA timezone name (e.g., Europe/Moscow, America/New_York, UTC)",
+      "examples": [
+        "UTC",
+        "Europe/Moscow",
+        "America/New_York",
+        "Asia/Tokyo"
+      ]
+    }
+  },
+  "title": "VK Scheduler Configuration"
+}

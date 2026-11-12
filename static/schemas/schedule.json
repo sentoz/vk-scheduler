@@ -1,0 +1,141 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/sentoz/vk-scheduler/internal/config/schedule-manifest",
+  "$ref": "#/$defs/ScheduleManifest",
+  "$defs": {
+    "ActionConfig": {
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "time": {
+          "type": "string"
+        },
+        "crontab": {
+          "type": "string"
+        },
+        "day": {
+          "type": "integer"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "enabled"
+      ]
+    },
+    "Actions": {
+      "properties": {
+        "start": {
+          "$ref": "#/$defs/ActionConfig"
+        },
+        "stop": {
+          "$ref": "#/$defs/ActionConfig"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "ResourceRef": {
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "vm",
+            "k8s_v1",
+            "k8s_v2"
+          ]
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "type",
+        "id"
+      ]
+    },
+    "ScheduleManifest": {
+      "properties": {
+        "apiVersion": {
+          "type": "string",
+          "enum": [
+            "scheduler.vk/v1alpha1"
+          ]
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "Schedule"
+          ]
+        },
+        "metadata": {
+          "$ref": "#/$defs/ScheduleManifestMeta"
+        },
+        "spec": {
+          "$ref": "#/$defs/ScheduleManifestSpec"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "apiVersion",
+        "kind",
+        "metadata",
+        "spec"
+      ]
+    },
+    "ScheduleManifestMeta": {
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "annotations": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "name"
+      ]
+    },
+    "ScheduleManifestSpec": {
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "daily",
+            "weekly",
+            "monthly",
+            "cron"
+          ]
+        },
+        "resource": {
+          "$ref": "#/$defs/ResourceRef"
+        },
+        "actions": {
+          "$ref": "#/$defs/Actions"
+        },
+        "suspend": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "type",
+        "resource",
+        "actions"
+      ]
+    }
+  },
+  "title": "VK Scheduler Schedule Manifest"
+}

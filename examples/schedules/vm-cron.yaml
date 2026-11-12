@@ -1,0 +1,18 @@
+apiVersion: scheduler.vk/v1alpha1
+kind: Schedule
+metadata:
+  name: vm-cron
+  annotations:
+    vk-scheduler/display-name: vm-cron
+spec:
+  type: cron
+  resource:
+    type: vm
+    id: 44444444-4444-4444-8444-444444444444
+  actions:
+    start:
+      enabled: true
+      crontab: "0 9 * * 1-5"
+    stop:
+      enabled: true
+      crontab: "0 18 * * 1-5"

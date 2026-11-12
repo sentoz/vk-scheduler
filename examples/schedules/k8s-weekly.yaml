@@ -1,0 +1,20 @@
+apiVersion: scheduler.vk/v1alpha1
+kind: Schedule
+metadata:
+  name: k8s-weekly
+  annotations:
+    vk-scheduler/display-name: k8s-weekly
+spec:
+  type: weekly
+  resource:
+    type: k8s_v1
+    id: 22222222-2222-4222-8222-222222222222
+  actions:
+    start:
+      enabled: true
+      day: 1
+      time: "08:45"
+    stop:
+      enabled: true
+      day: 5
+      time: "19:00"

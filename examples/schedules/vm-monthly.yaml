@@ -1,0 +1,20 @@
+apiVersion: scheduler.vk/v1alpha1
+kind: Schedule
+metadata:
+  name: vm-monthly
+  annotations:
+    vk-scheduler/display-name: vm-monthly
+spec:
+  type: monthly
+  resource:
+    type: vm
+    id: 33333333-3333-4333-8333-333333333333
+  actions:
+    start:
+      enabled: true
+      day: 31
+      time: "09:00"
+    stop:
+      enabled: true
+      day: 31
+      time: "18:00"

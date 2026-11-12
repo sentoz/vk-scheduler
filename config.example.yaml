@@ -1,0 +1,20 @@
+timezone: Europe/Moscow
+max_concurrent_jobs: 5
+validation_interval: 10m
+validation_resources: true
+shutdown_timeout: 5m
+operation_timeout: 30m
+metrics_enabled: true
+ui_enabled: true
+metrics_port: 9090
+schedules_dir: ./examples/schedules
+cloud:
+  auth_url: https://msk.cloud.vk.ru/infra/identity/v3/
+  user_domain_name: users
+  interface: public
+  request_timeout: 30s
+  poll_interval: 5s
+  magnum_microversion: "1.33"
+  max_concurrent_reads: 8
+  # Catalog discovery is preferred; this optional override targets Managed-k8s only.
+  # managed_k8s_endpoint: https://msk.cloud.vk.ru/infra/container/managed-kubernetes/v1

@@ -1,0 +1,18 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: vk-scheduler
+resources:
+  - namespace.yaml
+  - deployment.yaml
+configMapGenerator:
+  - name: vk-scheduler-config
+    files:
+      - config.yaml
+  - name: vk-scheduler-schedules
+    options:
+      disableNameSuffixHash: true
+    files:
+      - schedules/vm-example.yaml
+  - name: vk-scheduler-scope
+    envs:
+      - scope.example.env

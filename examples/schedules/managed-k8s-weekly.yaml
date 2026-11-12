@@ -1,0 +1,20 @@
+apiVersion: scheduler.vk/v1alpha1
+kind: Schedule
+metadata:
+  name: managed-k8s-weekly
+  annotations:
+    vk-scheduler/display-name: Managed Kubernetes
+spec:
+  type: weekly
+  resource:
+    type: k8s_v2
+    id: 33333333-3333-4333-8333-333333333333
+  actions:
+    start:
+      enabled: true
+      day: 1
+      time: "08:45"
+    stop:
+      enabled: true
+      day: 5
+      time: "19:00"

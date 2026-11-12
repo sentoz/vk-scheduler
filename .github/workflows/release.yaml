@@ -1,0 +1,22 @@
+name: release artifacts
+on:
+  push:
+    tags: ["v*"]
+permissions:
+  contents: read
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/setup-go@d35c59abb061a4a6fb18e82ac0862c26744d6ab5 # v5.5.0
+        with:
+          go-version-file: go.mod
+      - run: make tools check release
+      - run: docker build -t vk-scheduler:release .
+      - run: docker run --rm --network none --read-only vk-scheduler:release --version
+      - run: docker save vk-scheduler:release -o build/vk-scheduler-linux-amd64-image.tar
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: vk-scheduler-${{ github.ref_name }}
+          path: build/

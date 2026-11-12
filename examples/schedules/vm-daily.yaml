@@ -1,0 +1,18 @@
+apiVersion: scheduler.vk/v1alpha1
+kind: Schedule
+metadata:
+  name: vm-daily
+  annotations:
+    vk-scheduler/display-name: vm-daily
+spec:
+  type: daily
+  resource:
+    type: vm
+    id: 11111111-1111-4111-8111-111111111111
+  actions:
+    start:
+      enabled: true
+      time: "09:00"
+    stop:
+      enabled: true
+      time: "18:00"

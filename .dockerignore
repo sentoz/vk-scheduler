@@ -1,0 +1,5 @@
+*
+!Dockerfile
+!build/
+build/*
+!build/vk-scheduler-linux-amd64
