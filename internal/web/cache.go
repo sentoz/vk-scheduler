@@ -54,7 +54,7 @@ func (c *statusCache) get(ctx context.Context, generation uint64, target config.
 		c.mu.Unlock()
 		return item.result
 	}
-	key := cacheKey{generation, target.Key()}
+	key := cacheKey{generation: generation, key: target.Key()}
 	f := c.flights[key]
 	if f == nil {
 		f = &flight{done: make(chan struct{})}
@@ -76,7 +76,7 @@ func (c *statusCache) get(ctx context.Context, generation uint64, target config.
 			c.mu.Lock()
 			f.result = result
 			if generation == c.generation {
-				c.entries[target.Key()] = cacheEntry{result, time.Now().Add(30 * time.Second)}
+				c.entries[target.Key()] = cacheEntry{result: result, expires: time.Now().Add(30 * time.Second)}
 			}
 			delete(c.flights, key)
 			close(f.done)
