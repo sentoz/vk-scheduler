@@ -27,32 +27,11 @@ spec:
       containers:
         - name: vk-scheduler
           image: ghcr.io/sentoz/vk-scheduler:0.1.0
-          args: ["--config=/config/config.yaml"]
-          env:
-            - name: VK_SCHEDULER_CONFIG
-              value: /config/config.yaml
-            - name: OS_AUTH_TYPE
-              value: v3password
-            - name: OS_PROJECT_ID
-              valueFrom:
-                configMapKeyRef:
-                  name: vk-scheduler-scope
-                  key: OS_PROJECT_ID
-            - name: OS_REGION_NAME
-              valueFrom:
-                configMapKeyRef:
-                  name: vk-scheduler-scope
-                  key: OS_REGION_NAME
-            - name: OS_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: vk-scheduler-auth
-                  key: OS_USERNAME
-            - name: OS_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: vk-scheduler-auth
-                  key: OS_PASSWORD
+          envFrom:
+            - configMapRef:
+                name: vk-scheduler-env
+            - secretRef:
+                name: vk-scheduler-env
           ports:
             - name: http
               containerPort: 9090

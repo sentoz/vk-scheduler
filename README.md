@@ -166,7 +166,7 @@ spec:
 
 ```bash
 kubectl apply -f deploy/namespace.yaml
-kubectl -n vk-scheduler create secret generic vk-scheduler-auth \
+kubectl -n vk-scheduler create secret generic vk-scheduler-env \
   --from-env-file=/absolute/path/to/private-vk-scheduler.env
 kubectl apply -k deploy/
 ```
